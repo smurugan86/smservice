@@ -2,7 +2,9 @@ package com.madurai.sms.services;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -14,42 +16,63 @@ import javax.ws.rs.core.Response.Status;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import com.madurai.sms.dao.NoteDAOImpl;
+import com.madurai.sms.dao.UserDAOImpl;
 
 
 @Path("/user")
 @Component
 public class UserService {
-
 	
 @Autowired
-NoteDAOImpl noteDAOImpl;
+UserDAOImpl userDAOImpl;
 
+/*@Autowired
+UserManager userManager;*/
 
-/*public NoteDAOImpl getNoteDAOImpl() {
-	return noteDAOImpl;
-}
-
-public void setNoteDAOImpl(NoteDAOImpl noteDAOImpl) {
-	this.noteDAOImpl = noteDAOImpl;
-}*/
-
-@GET
-  @Path("/{name}")
-  public String sayHello(@PathParam("name") String name) {
-    String output = "Hi from Jersey REST: " + name;
-    return output;
+  @GET
+  @Path("/{_id}")
+  public Response getUser(@PathParam("_id") String id) {
+	  Document userD = userDAOImpl.getUserbyId(id);
+	  return Response.ok(userD).build();
   }
     
   @GET
-  @Path("/list")
+  @Path("/getAllUser")
   @Produces({ MediaType.APPLICATION_JSON })
   public Response userLists2() {
-	Iterable<Document> aa = noteDAOImpl.getAllNotes();
-	return Response.ok(aa).build();
+	Iterable<Document> users = userDAOImpl.getAllUsers();
+	return Response.ok(users).build();
   }
    
+  @POST
+  @Path("/saveUser")
+  @Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response postCustomer(@RequestBody User user){
+	  User userVO = new User();  
+	  Document userD = userVO.UserVOToDoc(user);
+	  Document userData = userDAOImpl.saveUser(userD);
+	  System.out.println(userData);
+	  return Response.ok(userData).build();
+	}
+  
+  @POST
+  @Path("/updateuser")
+  @Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response updateuser(@RequestBody User user){
+	  User userVO = new User();  
+	  String id = user.getId();
+	  Document userDoc = userVO.UserVOToDocUpdate(user);
+	  userDAOImpl.updateUser(id,userDoc);
+	  System.out.println(user);
+	  return Response.ok(user).build();
+	}
+  
+ 
+  
   /*@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
