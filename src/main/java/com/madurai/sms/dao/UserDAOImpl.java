@@ -69,4 +69,9 @@ public class UserDAOImpl{
 		}
 	}
 	
+	public boolean deleteUserById(String userId) {
+		userCollection.deleteOne(new Document("_id", userId));
+		return true;
+	}
+	
 }

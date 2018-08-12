@@ -1,4 +1,4 @@
-package com.madurai.sms.services;
+package com.madurai.sms.domain;
 
 import java.util.Date;
 import java.util.Objects;
@@ -14,11 +14,11 @@ import com.madurai.sms.util.Constants;
 public class User{
 	
 	public User(){}
-	public String _id;
-	public String firstName;
-	public String lastName;
-	public String email;
-	public String mobileNo;
+	private String _id;
+	private String firstName;
+	private String lastName;
+	private String email;
+	private String mobileNo;
 	private String password;
 	private String textPassword;
 	private String status = Constants.ACT;

@@ -5,7 +5,6 @@ import static com.mongodb.client.model.Filters.eq;
 import org.bson.Document;
 import org.springframework.stereotype.Repository;
 
-import com.madurai.sms.services.User;
 import com.madurai.sms.util.CommonUtil;
 import com.madurai.sms.util.Constants;
 import com.mongodb.ErrorCategory;

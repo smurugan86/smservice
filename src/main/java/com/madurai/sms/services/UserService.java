@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.madurai.sms.dao.UserDAOImpl;
+import com.madurai.sms.domain.User;
 
 
 @Path("/user")
@@ -54,7 +55,6 @@ UserManager userManager;*/
 	  User userVO = new User();  
 	  Document userD = userVO.UserVOToDoc(user);
 	  Document userData = userDAOImpl.saveUser(userD);
-	  System.out.println(userData);
 	  return Response.ok(userData).build();
 	}
   
@@ -67,28 +67,16 @@ UserManager userManager;*/
 	  String id = user.getId();
 	  Document userDoc = userVO.UserVOToDocUpdate(user);
 	  userDAOImpl.updateUser(id,userDoc);
-	  System.out.println(user);
 	  return Response.ok(user).build();
 	}
   
- 
+  @GET
+  @Path("/deleteuser/{_id}")
+  public Response deleteUser(@PathParam("_id") String userId) {
+	  boolean isDelete = userDAOImpl.deleteUserById(userId);
+	  return Response.ok(isDelete).build();
+  }
   
-  /*@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("senders")
-	public Response processPriceCatalogLocationDocument(	
-			@RequestBody String payload, @Context HttpHeaders headers, @Context HttpServletRequest httpServletRequest)
-			{
-		StringBuilder parseError = new StringBuilder();
-		StringBuilder flowId = new StringBuilder();
-		AtomicInteger statusCode = new AtomicInteger(Status.OK.getStatusCode());
-		int jobId = 0;
-		Response response = populateResponse(statusCode, parseError.toString(), jobId);
-		return response;
-	}*/
-	
-	
 	
 	public static Response populateResponse(AtomicInteger restStatusCode, String parseError, int jobId) {
 		ResponseBuilder responseBuilder = Response.noContent().type(MediaType.APPLICATION_JSON);
