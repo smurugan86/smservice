@@ -1,7 +1,6 @@
 package com.madurai.sms.services;
 
-/**
- * For PIX related Constants.
+/** 
  * @author Murugan Srinivasan
  *  */
 public final class RestConstants {
@@ -15,7 +14,6 @@ public final class RestConstants {
 	
 	public static final String UNEXPECTED_ERROR = "An unexpected error has occurred";	
 	public static final String REQUEST_PAYLOAD_CREATED = "Request Payload Created";
-	public static final String S3 = "S3";
 	
 	public static final String DOCFLOWID_LOCATION_SHOULD_NOT_EMPTY = "Document Flow Id & Location should not be empty";
 	public static final String DOCFLOWID_SHOULD_NOT_EMPTY = "Document Flow Id should not be empty";

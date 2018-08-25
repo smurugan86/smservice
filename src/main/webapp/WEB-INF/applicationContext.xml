@@ -11,12 +11,4 @@
     <context:annotation-config />
 	<context:component-scan base-package="com.madurai.sms" />
 	
-  <!-- <bean id="noteDAOImpl"
-		class="co.dragonfly.jersey_example.dao.NoteDAOImpl" />		 -->
- <!--  
-<bean id="userService" class="co.dragonfly.jersey_example.services.UserService">
-        <property name="noteDAOImpl" ref="noteDAOImpl"></property>
-    </bean> --> 
-    	
-	
 </beans>

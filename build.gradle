@@ -10,9 +10,9 @@ repositories {
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-project.group = 'com.ghx.pix'
+project.group = 'com.sm.mad'
 project.archivesBaseName = 'TestPrro'
-project.description = 'Price Integrity Xpert - Global Healthcare Exchange, Inc'
+project.description = 'Madurai Pro'
 
 
 jar {
