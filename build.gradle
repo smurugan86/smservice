@@ -79,7 +79,9 @@ dependencies {
   	// https://mvnrepository.com/artifact/com.sun.jersey.contribs/jersey-spring
     compile group: 'com.sun.jersey.contribs', name: 'jersey-spring', version: '1.9.1'	
     
-    
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+
     
 	//Mongo Pro
 	// https://mvnrepository.com/artifact/org.mongodb/mongo-java-driver
