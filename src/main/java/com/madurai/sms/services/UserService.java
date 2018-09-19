@@ -1,5 +1,6 @@
 package com.madurai.sms.services;
 
+import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.ws.rs.Consumes;
@@ -59,6 +60,22 @@ UserManager userManager;*/
 	}
   
   @POST
+  @Path("/login")
+  @Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response login(@RequestBody User user){
+	  User userVO = new User();  
+	 // Document userD = userVO.UserVOToDoc(user);
+	  //Document userData = userDAOImpl.saveUser(userD);
+	  boolean isValid = userDAOImpl.isValidUser(user.getEmail(), user.getPassword());
+	  if(isValid){
+		  Document userD = userDAOImpl.getUserbyEmail(user.getEmail());
+		  return Response.ok(userD).build();
+	  }
+	  return Response.ok(userVO).build();
+	}
+  
+  @POST
   @Path("/updateuser")
   @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -67,7 +84,13 @@ UserManager userManager;*/
 	  String id = user.getId();
 	  Document userDoc = userVO.UserVOToDocUpdate(user);
 	  userDAOImpl.updateUser(id,userDoc);
-	  return Response.ok(user).build();
+	  
+	HashMap<String, Object> data = new HashMap<>();
+	data.put("user", user);
+	data.put("usr_tab", "active");
+	
+	
+	  return Response.ok(data).build();
 	}
   
   @GET

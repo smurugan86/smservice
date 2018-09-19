@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.bson.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.madurai.sms.util.CommonUtil;
 import com.madurai.sms.util.Constants;
 
 
@@ -85,7 +86,7 @@ public class User{
 		user.append(Constants.FIRST_NAME, userDoc.getFirstName());
 		user.append(Constants.LAST_NAME, userDoc.getLastName());
 		user.append(Constants.EMAIL, userDoc.getEmail());
-		//user.append(Constants.PASSWORD, CommonUtil.makePasswordHash(userDoc.getPassword(), Integer.toString(CommonUtil.getRandom().nextInt())));		
+		user.append(Constants.PASSWORD, CommonUtil.makePasswordHash(userDoc.getPassword(), Integer.toString(CommonUtil.getRandom().nextInt())));		
 		user.append(Constants.TEXT_PASSWORD, userDoc.getTextPassword());
 		user.append(Constants.STATUS, Constants.ACT);
 		user.append(Constants.USER_ROLE, Constants.ROLE_USER);

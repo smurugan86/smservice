@@ -2,6 +2,8 @@ package com.madurai.sms.dao;
 
 import static com.mongodb.client.model.Filters.eq;
 
+import java.util.Date;
+
 import org.bson.Document;
 import org.springframework.stereotype.Repository;
 
@@ -72,6 +74,29 @@ public class UserDAOImpl{
 	public boolean deleteUserById(String userId) {
 		userCollection.deleteOne(new Document("_id", userId));
 		return true;
+	}
+
+	public boolean isValidUser(String email, String password) {
+		 Document user = null;
+	        user = userCollection.find(eq(Constants.EMAIL, email)).first();   
+	        
+	        if(null!=user){
+		        String hashedAndSalted = user.get(Constants.PASSWORD).toString();
+		        String salt = hashedAndSalted.split(",")[1];
+		        if (hashedAndSalted.equals(CommonUtil.makePasswordHash(password, salt))) {    
+		        	userCollection.updateOne(new Document(Constants._ID, user.get(Constants._ID).toString()),
+		    		        new Document("$set", new Document(Constants.LAST_LOGIN_DATE, new Date())));
+		            return true;
+		        }
+	        }
+	        
+	        System.out.println("Submitted password is not a match");
+	        return false;
+	}
+
+	public Document getUserbyEmail(String email) {
+		// TODO Auto-generated method stub
+		return userCollection.find(eq(Constants.EMAIL, email)).first();
 	}
 	
 }

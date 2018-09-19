@@ -2,6 +2,8 @@ package com.madurai.sms.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,6 +11,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Objects;
+import java.util.Random;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +24,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import sun.misc.BASE64Encoder;
 
 
 public class CommonUtil{
@@ -161,9 +165,14 @@ public class CommonUtil{
 				
 				return ischeck;
 			}
+
+		/*public static Object makePasswordHash(String password, String salt) {
+			// TODO Auto-generated method stub
+			return null;
+		}*/
 		  
 		  
-		/*public static String makePasswordHash(String password, String salt) {
+		public static String makePasswordHash(String password, String salt) {
 	        try {
 	            String saltedAndHashed = password + "," + salt;
 	            MessageDigest digest = MessageDigest.getInstance("MD5");
@@ -176,7 +185,17 @@ public class CommonUtil{
 	        } catch (UnsupportedEncodingException e) {
 	            throw new RuntimeException("UTF-8 unavailable?  Not a chance", e);
 	        }
-	    }*/
+	    }
+
+		public static Random getRandom() {
+			final ThreadLocal<Random> random = new ThreadLocal<Random>();
+	        Random result = random.get();
+	        if (result == null) {
+	            result = new Random();
+	            random.set(result);
+	        }
+	        return result;
+	    }
 		
 
 		
