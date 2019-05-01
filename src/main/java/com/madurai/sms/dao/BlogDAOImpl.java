@@ -12,33 +12,27 @@ import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoCollection;
 
 @Repository
-public class TaskDAOImpl{
+public class BlogDAOImpl{
 	
-	MongoCollection<Document> taskCollection;
+	MongoCollection<Document> blogPostCollection;
 	
-	public TaskDAOImpl() {
+	public BlogDAOImpl() {
 		try{		
-		 taskCollection = CommonUtil.getMongoDBConnection(Constants.CLS_MY_TASK);
+		 blogPostCollection = CommonUtil.getMongoDBConnection(Constants.CLS_MY_POST);
 		}catch (MongoWriteException e) {
 			System.out.println(e.getError());            
 		}
 	}
 
-	public Document getNotesById(String id) {
-		 Document task = null;
-	        task = taskCollection.find(eq("_id", id)).first(); 
-		return task;
-	}
-	
 	public Iterable<Document> getAllTask(String userId) {
-		Iterable<Document> taskList = taskCollection.find(eq(Constants.USER_ID, userId));
+		Iterable<Document> taskList = blogPostCollection.find(eq(Constants.USER_ID, userId));
 		return taskList;
 	}
 
-	public Document saveTask(Document task) {
+	public Document saveBlog(Document blog) {
 		try {			
-	        taskCollection.insertOne(task);
-			return task;
+	        blogPostCollection.insertOne(blog);
+			return blog;
 		}catch (MongoWriteException e) {
 	            if (e.getError().getCategory().equals(ErrorCategory.DUPLICATE_KEY)) {
 	                System.out.println("task already in use");	               
@@ -47,10 +41,10 @@ public class TaskDAOImpl{
 		return null;
 	}
 
-	public void updateTask(String id, Document taskDoc) {
+	public void updateBlog(String id, Document blogDoc) {
 		try {			
-			taskCollection.updateOne(new Document(Constants._ID, id),
-		        new Document("$set", taskDoc));		
+			blogPostCollection.updateOne(new Document(Constants._ID, id),
+		        new Document("$set", blogDoc));		
 		}catch (MongoWriteException e) {
             if (e.getError().getCategory().equals(ErrorCategory.DUPLICATE_KEY)) {
                 System.out.println("Task id " + id);	               
@@ -58,14 +52,14 @@ public class TaskDAOImpl{
 		}
 	}
 
-	public Document getTaskbyId(String id) {
+	public Document getBlogbyId(String id) {
 		 Document task = null;
-	        task = taskCollection.find(eq(Constants._ID, id)).first(); 
+	        task = blogPostCollection.find(eq(Constants._ID, id)).first(); 
 		return task;
 	}
 
-	public boolean deleteTaskById(String taskId) {
-		taskCollection.deleteOne(new Document("_id", taskId));
+	public boolean deleteBlogById(String blogId) {
+		blogPostCollection.deleteOne(new Document("_id", blogId));
 		return true;
 	}
 	

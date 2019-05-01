@@ -9,8 +9,11 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -25,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.madurai.sms.domain.AccountsVO;
-import com.madurai.sms.domain.TaskVO;
 import com.madurai.sms.manager.AccountManager;
 import com.madurai.sms.util.CommonUtil;
 import com.madurai.sms.util.Constants;
@@ -37,6 +39,45 @@ public class AccountService {
 	@Autowired
 	AccountManager accountManager;
 
+	 @POST
+	  @Path("/saveAccount")
+	  @Consumes(MediaType.APPLICATION_JSON)
+		@Produces(MediaType.APPLICATION_JSON)
+		public Response saveAccount(@RequestBody AccountsVO accountvo){
+		  AccountsVO acc = new AccountsVO();  
+		  Document accDoc = acc.AccountVOToDoc(accountvo);
+		 Document accData = accountManager.saveAccount(accDoc);
+		  return Response.ok(accData).build();
+		}	
+	
+	 @GET
+	  @Path("/{_id}")
+	  public Response getAccount(@PathParam("_id") String id) {
+		  Document accountDoc = accountManager.getAccountById(id);
+		  return Response.ok(accountDoc).build();
+	  }
+	
+	 
+	 @POST
+	    @Path("/updateAccount")
+	    @Consumes(MediaType.APPLICATION_JSON)
+	  	@Produces(MediaType.APPLICATION_JSON)
+	  	public Response updateAccount(@RequestBody AccountsVO acc){
+		 AccountsVO accountsVO = new AccountsVO();  
+	  	  String id = acc.get_id();
+	  	  Document accountsDoc = accountsVO.UpdateAccountVOToDoc(acc);
+	  	  accountManager.updateAccount(id,accountsDoc);
+	  	  return Response.ok(acc).build();
+	  	}
+	    
+	    @GET
+	    @Path("/deleteTask/{_id}")
+	    public Response deleteTask(@PathParam("_id") String taskId) {
+	  	  boolean isDelete = accountManager.deleteAccountById(taskId);
+	  	  return Response.ok(isDelete).build();
+	    }
+	    
+	 
 	@RequestMapping("/addAccount")
     public String addAccount(HttpServletRequest request,
             HttpServletResponse reponses,Model model) {         
@@ -51,8 +92,8 @@ public class AccountService {
         return "account/addaccount";         
     }
     
-    @RequestMapping("/saveAccount")
-    public String saveAccount(HttpServletRequest request,
+    @RequestMapping("/saveAccount2")
+    public String saveAccount2(HttpServletRequest request,
             HttpServletResponse reponses, Model model) {
     	
     	 String date = request.getParameter("date");
@@ -96,13 +137,19 @@ public class AccountService {
     }
     
     @GET
-    @Path("/list")
+    @Path("/list/{userId}")
     @Produces({ MediaType.APPLICATION_JSON })
-	public Response updateTask(@RequestBody TaskVO task){
-    	Document searchFeilds = new Document();
-    	accountManager.updateMySearchFeilds("",searchFeilds);
-    	return Response.ok(searchFeilds).build();
+    public Response accountList(@PathParam("userId") String userId) {
+    	List<Document> aclist = accountManager.findAllAccountByUserId(userId);
+    	return Response.ok(aclist).build();
 	}
+    
+    @GET
+	@Path("/getTotalAccount/{userId}")
+	public Response getTotalAccount(@PathParam("userId") String userId) {
+		  Document accountDoc = accountManager.getTotalAccount(userId);
+		  return Response.ok(accountDoc).build();
+	  }
     
     @RequestMapping("/accountlist")
     public String accountlist(HttpServletRequest request,
@@ -211,8 +258,10 @@ public class AccountService {
          return "account/editaccountpage";          
     }
     
-    @RequestMapping("/updateAccount")
-    public String updateAccount(HttpServletRequest request,
+   
+    
+    @RequestMapping("/updateAccount2")
+    public String updateAccount2(HttpServletRequest request,
             HttpServletResponse reponses, Model model) {
     	
     	 String date = request.getParameter("date");    	 
@@ -307,44 +356,6 @@ public class AccountService {
 	
 	
 	
-	@RequestMapping("/test")
-	public String test(HttpServletRequest request,
-			HttpServletResponse reponses, Model model) throws IOException {	
-		List<Document> aclist = accountManager.findAllCategory("1");
-	    model.addAttribute("name", aclist);
-	    
-	    
-	    String sportsName = request.getParameter("sportsName");
-        List<String> list = new ArrayList<String>();
-        String json = null;
-
-        if (null!=sportsName && sportsName.equals("Football")) {
-                list.add("Lionel Messi");
-                list.add("Cristiano Ronaldo");
-                list.add("David Beckham");
-                list.add("Diego Maradona");
-        } else if (null!=sportsName && sportsName.equals("Cricket")) {
-                list.add("Sourav Ganguly");
-                list.add("Sachin Tendulkar");
-                list.add("Lance Klusener");
-                list.add("Michael Bevan");
-        } else if (null!=sportsName && sportsName.equals("Select Sports")) {
-                list.add("Select Player");
-        }else{
-        	list.add("Murugan");
-        }
-
-        model.addAttribute("value", list);
-        
-        
-        json = "murugan";
-        
-        		//new Gson().toJson(list);
-        reponses.setContentType("application/json");
-        reponses.getWriter().write(json);
-        
-        return "account/test";
-	}
 	
    
 	/*@RequestMapping("/accExport")

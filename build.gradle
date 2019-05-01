@@ -55,6 +55,11 @@ dependencies {
   compile "com.sun.jersey:jersey-server:1.9.1"
   compile "com.sun.jersey:jersey-json:1.9.1"
   compile 'com.sun.jersey.contribs:jersey-contribs:1.9.1'
+  
+  // https://mvnrepository.com/artifact/commons-codec/commons-codec
+compile group: 'commons-codec', name: 'commons-codec', version: '1.9'
+  
+  
   	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.7.0'
 	compile group: 'org.glassfish.hk2.external', name: 'javax.inject', version: '2.5.0-b32'
 	compile group: 'org.springframework', name: 'spring-beans', version: '4.3.6.RELEASE'

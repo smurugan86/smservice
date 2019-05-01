@@ -83,7 +83,9 @@ public class UserDAOImpl{
 	        if(null!=user){
 		        String hashedAndSalted = user.get(Constants.PASSWORD).toString();
 		        String salt = hashedAndSalted.split(",")[1];
-		        if (hashedAndSalted.equals(CommonUtil.makePasswordHash(password, salt))) {    
+		        //if (hashedAndSalted.equals(CommonUtil.makePasswordHash(password, salt))) {
+		        	
+		        if (password.equals(user.get("textPassword").toString())) { 
 		        	userCollection.updateOne(new Document(Constants._ID, user.get(Constants._ID).toString()),
 		    		        new Document("$set", new Document(Constants.LAST_LOGIN_DATE, new Date())));
 		            return true;

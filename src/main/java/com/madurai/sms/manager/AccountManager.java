@@ -21,17 +21,12 @@ public class AccountManager
 	@Autowired
 	AccountDAO accountDAO;
 
-	////date,accountType, description,amount,userId
 	public String saveAccount(String date, String accountType,String categoryName,
 			String description,long amount,String userId) {
-		// TODO Auto-generated method stub
 		return accountDAO.saveAccount(date,accountType,categoryName,description,amount,userId);
 	}
 
-
-
 	public List<Document> findAllAccount(String date,String endDate,String accountType,String description,long amount, String userId) {
-		// TODO Auto-generated method stub
 		Iterable<Document> acList = accountDAO.findAllAccount(date,endDate,accountType,description,description,amount,userId);		
 		if(null!=acList){
 			List<Document> accList = new ArrayList<Document>();
@@ -49,21 +44,17 @@ public class AccountManager
 		}
 	}
 
-	public Document getAccountById(String id) {
-		// TODO Auto-generated method stub
+	public Document getAccountById(String id) {	
 		return accountDAO.getAccountById(id);
 	}
-//String acId, String date,String accountType,String description,long amount
+	
 	public void updateAccount(String acId, String date,String accountType,String categoryName,String description,long amount) {
-		// TODO Auto-generated method stub
 		accountDAO.updateAccount(acId,date, accountType, categoryName,description,amount);
 	}
 	public boolean deleteAccountById(String taskId) {
-		// TODO Auto-generated method stub
 		return accountDAO.deleteAccountById(taskId);
 	}
 	public List<Document> findAllCategory(String userId) {
-		// TODO Auto-generated method stub
 		Iterable<Document> acList = accountDAO.findAllCategory(userId);
 		if(null!=acList){
 			List<Document> accList = new ArrayList<Document>();
@@ -85,6 +76,27 @@ public class AccountManager
 	public String saveCategory(String categoryName, String categoryType,
 			String userId) {
 		return accountDAO.saveCategory(categoryName,categoryType,userId);
+	}
+	
+	public List<Document> findAllAccountByUserId(String userId) {
+		Iterable<Document> acList = accountDAO.findAllAccountByUserId(userId);		
+		if(null!=acList){
+			List<Document> accList = new ArrayList<Document>();
+			for (Document document : acList) {
+				String de =document.get("description").toString();
+				 de =	de.replaceAll("<p>", " ");
+				 de =	de.replaceAll("\\r?\\n", " ");	
+				 document.put("description", de);
+				//document.put("date", CommonUtil.dateToString(document.getDate("date")));
+				accList.add(document);
+			}
+			
+			//Document document2 = new Document();
+			//document2.put(key, value);
+			return accList;
+		}else{
+			return null;
+		}
 	}
 	
 	public Model searchAccount(String date, String endDate, String accountType, String categoryName,
@@ -134,12 +146,45 @@ public class AccountManager
 		return accountDAO.getMySearchFeilds(userId,screenName);
 	}
 	public Document saveMySearchFeilds(Document searchFeilds) {
-		// TODO Auto-generated method stub
 		return accountDAO.saveMySearchFeilds(searchFeilds);
 	}
 	public Document updateMySearchFeilds(String id, Document searchFeilds) {
-		// TODO Auto-generated method stub
 		return accountDAO.updateMySearchFeilds(id,searchFeilds);
+	}
+
+
+
+	public Document saveAccount(Document accDoc) {
+		return accountDAO.saveAccount(accDoc);
+	}
+
+	public void updateAccount(String id, Document taskDoc) {
+		 accountDAO.updateAccount(id,taskDoc);		
+	}
+
+	public Document getTotalAccount(String userId) {
+		AggregateIterable<Document> doc = accountDAO.getTotalAccount(userId);
+		
+		long credit = 0;
+    	long debit = 0;
+ 		for (Document document : doc) {
+ 			
+ 			if(document.get("_id").equals("Credit")){
+ 				credit = document.getLong("total");
+ 				System.out.println("document Total credit" +document.getLong("total"));
+ 			}
+ 			if(document.get("_id").equals("Debit")){
+ 				debit = document.getLong("total");
+ 				System.out.println("document Total debit" +document.getLong("total"));
+ 			}
+ 		}
+ 		
+ 		Document docc = new Document();
+ 		docc.put("credit", CommonUtil.convertLongToString(credit));
+ 		docc.put("debit", CommonUtil.convertLongToString(debit));
+ 		docc.put("balance", CommonUtil.convertLongToString(credit-debit));
+ 		 
+		return docc;
 	}
 	
 }

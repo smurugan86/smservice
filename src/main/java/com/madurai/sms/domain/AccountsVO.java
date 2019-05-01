@@ -12,7 +12,7 @@ import com.madurai.sms.util.Constants;
 
 public class AccountsVO{
 
-	private String id;
+	private String _id;
 	private String accountType;
 	private String categoryName;
 	private Long amount;
@@ -20,10 +20,13 @@ public class AccountsVO{
 	private String userId;
 	private Date date = new Date();
 	private Date createdDate = new Date();
-		
+	
+	public AccountsVO() {
+	}
+	
 	public AccountsVO(HttpServletRequest request) {
 		super();
-		this.id = request.getParameter(Constants._ID);
+		this._id = request.getParameter(Constants._ID);
 		this.accountType = request.getParameter(Constants.ACCOUNT_TYPE);
 		this.categoryName = request.getParameter(Constants.CATEGORY_NAME);
 		this.amount = Long.parseLong(request.getParameter(Constants.AMOUNT));
@@ -34,6 +37,19 @@ public class AccountsVO{
 	public Document AccountVOToDoc(AccountsVO accountVO) {			
 		Document account = new Document();
 		account.append(Constants._ID, UUID.randomUUID().toString());		
+		account.append(Constants.ACCOUNT_TYPE, accountVO.getAccountType());
+		account.append(Constants.CATEGORY_NAME, accountVO.getCategoryName());
+		account.append(Constants.AMOUNT, accountVO.getAmount());
+		account.append(Constants.DESCRIPTION, accountVO.getDescription());		
+		account.append(Constants.USER_ID, accountVO.getUserId());		
+		account.append(Constants.DATE, new Date());
+		account.append(Constants.CREATED_DATE, new Date());			
+		return account;
+	}
+	
+	public Document UpdateAccountVOToDoc(AccountsVO accountVO) {			
+		Document account = new Document();
+		//account.append(Constants._ID, UUID.randomUUID().toString());		
 		account.append(Constants.ACCOUNT_TYPE, accountVO.getAccountType());
 		account.append(Constants.CATEGORY_NAME, accountVO.getCategoryName());
 		account.append(Constants.AMOUNT, accountVO.getAmount());
@@ -76,12 +92,14 @@ public class AccountsVO{
 		}
 	}
 	
-	public String getId() {
-		return id;
+	public String get_id() {
+		return _id;
 	}
-	public void setId(String id) {
-		this.id = id;
+
+	public void set_id(String _id) {
+		this._id = _id;
 	}
+
 	public String getAccountType() {
 		return accountType;
 	}

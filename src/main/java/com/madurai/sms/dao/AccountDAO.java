@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.bson.Document;
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +18,6 @@ import com.mongodb.ErrorCategory;
 import com.mongodb.MongoWriteException;
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoCollection;
-import org.apache.commons.lang3.tuple.Pair;
 
 @Repository
 public class AccountDAO{
@@ -63,6 +63,13 @@ public class AccountDAO{
 		return null;
 	}
 
+	public Iterable<Document> findAllAccountByUserId(String userId) {
+		Document userDoc = new Document("userId", userId);
+		Iterable<Document> accList = acCollection.find(userDoc).sort(new Document("date", -1));
+		System.out.println("findAllAccount userId" + userId);
+		return accList;
+	}
+	
 	public Iterable<Document> findAllAccount(String date,String endDate,String accountType,String categoryName,String description,long amount, String userId) {
 			
 		List<Document> searchList = new ArrayList<Document>();
@@ -215,6 +222,33 @@ public class AccountDAO{
 		reportCollection.updateOne(new Document("_id", id),
 		        new Document("$set",searchFeilds));	
 		return searchFeilds;
+	}
+
+	public Document saveAccount(Document accDoc) {
+		acCollection.insertOne(accDoc);
+		return accDoc;
+	}
+
+	public void updateAccount(String id, Document taskDoc) {
+		try {			
+			acCollection.updateOne(new Document(Constants._ID, id),
+		        new Document("$set", taskDoc));		
+		}catch (MongoWriteException e) {
+            if (e.getError().getCategory().equals(ErrorCategory.DUPLICATE_KEY)) {
+                System.out.println("Task id " + id);	               
+            }
+		}
+	}
+
+	public AggregateIterable<Document> getTotalAccount(String userId) {
+		Document userDoc = new Document("userId", userId);
+		List<Document> pipeline = new ArrayList<Document>();	 
+		pipeline.add(new Document("$match",userDoc));
+	    pipeline.add(new Document("$group",new Document("_id", "$accountType").append("total", new Document("$sum", "$amount"))));
+	    	     
+	    AggregateIterable<Document> doc =  acCollection.aggregate(pipeline);
+	     
+		return doc;
 	}
 	
 }

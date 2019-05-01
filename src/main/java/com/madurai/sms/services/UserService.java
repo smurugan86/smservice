@@ -71,8 +71,10 @@ UserManager userManager;*/
 	  if(isValid){
 		  Document userD = userDAOImpl.getUserbyEmail(user.getEmail());
 		  return Response.ok(userD).build();
+	  }else{
+		  return Response.status(500).build();
 	  }
-	  return Response.ok(userVO).build();
+	 
 	}
   
   @POST
@@ -81,7 +83,7 @@ UserManager userManager;*/
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response updateuser(@RequestBody User user){
 	  User userVO = new User();  
-	  String id = user.getId();
+	  String id = user.get_id();
 	  Document userDoc = userVO.UserVOToDocUpdate(user);
 	  userDAOImpl.updateUser(id,userDoc);
 	  

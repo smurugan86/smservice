@@ -10,6 +10,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.madurai.sms.util.Constants;
 
 
+/**
+ * @author sys-user
+ *
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)	
 public class TaskVO{
 	
@@ -20,12 +24,14 @@ public class TaskVO{
 	private String description;
 	private Date taskDate;
 	private String createdBy;
+	private String userId;
 	
-	public String getId() {
+	public String get_id() {
 		return _id;
 	}
-	public void setId(String id) {
-		this._id = id;
+
+	public void set_id(String _id) {
+		this._id = _id;
 	}
 
 	public String getTitle() {
@@ -66,12 +72,20 @@ public class TaskVO{
 	public void setTaskDate(Date taskDate) {
 		this.taskDate = taskDate;
 	}
+	
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 	public Document TaskVOToDoc(TaskVO taskDoc) {			
 		Document task = new Document();
 		task.append(Constants._ID, UUID.randomUUID().toString());		
 		task.append(Constants.TITLE, taskDoc.getTitle());
 		task.append(Constants.USER_STORY, taskDoc.getUserStory());
 		task.append(Constants.DESCRIPTION, taskDoc.getDescription());
+		task.append(Constants.USER_ID, taskDoc.getUserId());
 		task.append(Constants.DATE, new Date());
 		task.append(Constants.CREATED_DATE, new Date());
 		task.append("taskDate", taskDoc.getTaskDate());

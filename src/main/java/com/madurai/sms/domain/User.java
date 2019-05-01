@@ -25,11 +25,11 @@ public class User{
 	private String status = Constants.ACT;
 	private String userRole = Constants.ROLE_USER;
 	
-	public String getId() {
+	public String get_id() {
 		return _id;
 	}
-	public void setId(String id) {
-		this._id = id;
+	public void set_id(String _id) {
+		this._id = _id;
 	}
 	public String getFirstName() {
 		return firstName;
@@ -86,8 +86,8 @@ public class User{
 		user.append(Constants.FIRST_NAME, userDoc.getFirstName());
 		user.append(Constants.LAST_NAME, userDoc.getLastName());
 		user.append(Constants.EMAIL, userDoc.getEmail());
-		user.append(Constants.PASSWORD, CommonUtil.makePasswordHash(userDoc.getPassword(), Integer.toString(CommonUtil.getRandom().nextInt())));		
-		user.append(Constants.TEXT_PASSWORD, userDoc.getTextPassword());
+		//user.append(Constants.PASSWORD, CommonUtil.makePasswordHash(userDoc.getPassword(), Integer.toString(CommonUtil.getRandom().nextInt())));		
+		user.append(Constants.TEXT_PASSWORD, userDoc.getPassword());
 		user.append(Constants.STATUS, Constants.ACT);
 		user.append(Constants.USER_ROLE, Constants.ROLE_USER);
 		user.append(Constants.DATE, new Date());
